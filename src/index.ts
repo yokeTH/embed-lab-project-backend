@@ -11,8 +11,41 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+import webhook from './post/webhook';
+import token from './post/token';
+import dust from './get/dust';
+import users from './post/users';
+import login from './post/login';
+import pet from './get/pet';
+import response from './middlewares/response';
+import SuccessResponse from './dtos/success';
+
+// declare global {
+// 	interface Env {
+// 		DB: D1Database;
+// 	}
+// }
+
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-		return new Response('Hello World!');
+		const url = new URL(request.url);
+		const { method } = request;
+
+		console.log(method, url);
+
+		if (method == 'POST' && url.pathname == '/webhook') {
+			return webhook(request, env);
+		} else if (method == 'POST' && url.pathname == '/token') {
+			return token(request, env);
+		} else if (method == 'POST' && url.pathname == '/login') {
+			return login(request, env);
+		} else if (method == 'POST' && url.pathname == '/users') {
+			return users(request, env);
+		} else if (method == 'GET' && url.pathname == '/dust') {
+			return dust(request, env);
+		} else if (method == 'GET' && url.pathname == '/pet') {
+			return pet(request, env);
+		}
+		return response(new SuccessResponse({ name: 'pet-society-backend', description: 'a final project for embed lab', version: '1.0.10' }));
 	},
-};
+} satisfies ExportedHandler<Env>;

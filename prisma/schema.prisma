@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @default(uuid())
+  email    String   @unique
+  password String
+  name     String   @unique
+  Pet      Pet[]
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model Pet {
+  id       String   @id @default(uuid())
+  deviceId String   @unique
+  name     String
+  owner    User     @relation(fields: [ownerId], references: [id])
+  ownerId  String
+  record   Record[]
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model Record {
+  id        String   @id @default(uuid())
+  dustValue Float
+  latitude  Float
+  longitude Float
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+  pet       Pet      @relation(fields: [petId], references: [id])
+  petId     String
+}
