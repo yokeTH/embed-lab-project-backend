@@ -31,7 +31,7 @@ export default {
 		const url = new URL(request.url);
 		const { method } = request;
 
-		console.log(method, url);
+		console.log(method, url.pathname);
 
 		if (method == 'POST' && url.pathname == '/webhook') {
 			return webhook(request, env);
@@ -46,6 +46,6 @@ export default {
 		} else if (method == 'GET' && url.pathname == '/pet') {
 			return pet(request, env);
 		}
-		return response(new SuccessResponse({ name: 'pet-society-backend', description: 'a final project for embed lab', version: '1.0.11' }));
+		return response(new SuccessResponse({ name: 'pet-society-backend', description: 'a final project for embed lab', version: '1.0.13' }));
 	},
 } satisfies ExportedHandler<Env>;

@@ -6,13 +6,16 @@ import ErrorResponse from '../dtos/error';
 
 export default async function dust(request: Request, env: Env) {
 	try {
+		const url = new URL(request.url);
 		const adapter = new PrismaD1(env.DB);
 		const prisma = new PrismaClient({ adapter });
+
+		const r = Number(url.searchParams.get('r')) || 5;
 
 		const dust = await prisma.record.findMany({
 			where: {
 				createAt: {
-					gte: new Date(Date.now() - 1000 * 60 * 5),
+					gte: new Date(Date.now() - 1000 * 60 * r),
 				},
 			},
 		});

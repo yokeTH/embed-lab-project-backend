@@ -21,9 +21,10 @@ export default async function login(request: Request, env: Env) {
 		const verify = await verifyPassword(user.password, password);
 		if (!verify) throw new HttpException('invalid email or password', 401);
 
+		const exp = Math.floor(Date.now() / 1000) + 3600;
 		const payload = { userId: user.id, exp: Math.floor(Date.now() / 1000) + 3600 };
 		const token = await jwt.sign(payload, env.JWT_SECRET);
-		return response(new SuccessResponse({ user: { ...user, password: undefined }, token }));
+		return response(new SuccessResponse({ user: { ...user, password: undefined }, token, exp }));
 	} catch (e: unknown) {
 		return response(new ErrorResponse(e));
 	}
