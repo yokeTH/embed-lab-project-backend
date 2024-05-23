@@ -23,7 +23,7 @@ export default async function login(request: Request, env: Env) {
 
 		const payload = { userId: user.id, exp: Math.floor(Date.now() / 1000) + 3600 };
 		const token = await jwt.sign(payload, env.JWT_SECRET);
-		return response(new SuccessResponse({ token }));
+		return response(new SuccessResponse({ user: { ...user, password: undefined }, token }));
 	} catch (e: unknown) {
 		return response(new ErrorResponse(e));
 	}
