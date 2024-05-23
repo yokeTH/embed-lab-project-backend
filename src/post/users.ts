@@ -30,7 +30,7 @@ export default async function users(request: Request, env: Env) {
 		const payload = { userId: user.id, exp: Math.floor(Date.now() / 1000) + 3600 };
 		const token = await jwt.sign(payload, env.JWT_SECRET);
 
-		return response(new SuccessResponse({ user, pets, token }));
+		return response(new SuccessResponse({ user: { ...user, password: undefined }, pets, token }));
 	} catch (e: unknown) {
 		return response(new ErrorResponse(e));
 	}
