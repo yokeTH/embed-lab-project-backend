@@ -46,6 +46,6 @@ export default {
 		} else if (method == 'GET' && url.pathname == '/pet') {
 			return pet(request, env);
 		}
-		return response(new SuccessResponse({ name: 'pet-society-backend', description: 'a final project for embed lab', version: '1.0.10' }));
+		return response(new SuccessResponse({ name: 'pet-society-backend', description: 'a final project for embed lab', version: '1.0.11' }));
 	},
 } satisfies ExportedHandler<Env>;
